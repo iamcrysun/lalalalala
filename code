@@ -1,4 +1,40 @@
-# Пример вызова функции для обработки директории
-directory = "Файлы"
-find = "global energy"
-process_pdf_directory(directory, find)
+import os
+from pathlib import Path
+import ipywidgets as widgets
+from IPython.display import display
+
+# Создаем виджеты для ввода данных
+directory_input = widgets.Text(
+    value='Файлы',
+    description='Директория:',
+    disabled=False
+)
+
+keyword_input = widgets.Text(
+    value='global energy',
+    description='Ключевое слово:',
+    disabled=False
+)
+
+# Кнопка для запуска процесса
+run_button = widgets.Button(
+    description='Найти',
+    disabled=False,
+    button_style='success'  # 'success', 'info', 'warning', 'danger' или ''
+)
+
+# Функция, которая будет вызываться при нажатии на кнопку
+def on_button_click(b):
+    directory = directory_input.value
+    keyword = keyword_input.value
+    print(f"\nПоиск в директории: {directory}")
+    print(f"Искомое слово: {keyword}")
+    
+    # Запуск процесса обработки PDF
+    process_pdf_directory(directory, keyword)
+
+# Привязываем функцию к кнопке
+run_button.on_click(on_button_click)
+
+# Отображаем элементы управления
+display(directory_input, keyword_input, run_button)
