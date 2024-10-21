@@ -1,10 +1,22 @@
-pdf_path = "Coal_Trader_16_Sep_2024.pdf"
+def process_pdf_directory(directory_path, find_word):
+    # Проходим по всем PDF-файлам в директории
+    for file_path in Path(directory_path).glob('*.pdf'):
+        paragraphs = extract_paragraphs_from_pdf(file_path)
+        processed_text = process_paragraphs(paragraphs)
+        lines_list = process_and_merge_tabbed_lines(processed_text)
+        processed_list = process_list_elements(lines_list)
+        result = [process_text(text) for text in processed_list]
+        
+        # Ищем фрагменты
+        fragments = find_near_words(result, processed_list, find_word)
+        
+        # Если есть фрагменты, выводим имя файла и фрагменты
+        if fragments:
+            print(f"\n=== Найдено в файле: {file_path.name} ===")
+            for index, fragment in fragments:
+                print(f"Фрагмент {index + 1}: {fragment}\n")
+
+# Пример вызова функции для обработки директории
+directory = "path/to/your/pdf_directory"
 find = "global energy"
-
-
-paragraphs = extract_paragraphs_from_pdf(pdf_path)
-processed_text = process_paragraphs(paragraphs)
-lines_list = process_and_merge_tabbed_lines(processed_text)
-processed_list = process_list_elements(lines_list)
-result = [process_text(text) for text in processed_list]
-find_near_words(result, processed_list, find)
+process_pdf_directory(directory, find)
