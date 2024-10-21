@@ -1,6 +1,12 @@
-import nltk
-import os
+# Функция для очистки текста: удаление стоп-слов и лемматизация
+def process_text(text):
+    # Токенизация
+    tokens = word_tokenize(text)
 
-# Указываем путь к папке nltk_data
-nltk_data_path = os.path.join(os.getcwd(), 'nltk_data')
-nltk.data.path.append(nltk_data_path)
+    # Удаление стоп-слов и лемматизация
+    cleaned_tokens = [
+        lemmatizer.lemmatize(word.lower()) for word in tokens
+        if word.isalnum() and word.lower() not in stop_words  # Убираем стоп-слова и небуквенные токены
+    ]
+
+    return cleaned_tokens
