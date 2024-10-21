@@ -1,27 +1,8 @@
-# Основная функция поиска
-def find_near_words(result, processed_list, find):
-    lemmatized_find = process_text(find)  # Лемматизируем и очищаем find через process_text
+import os
+from pdf2image import convert_from_path
 
-    found_indices = []  # Список для хранения индексов найденных предложений
+# Получаем текущую директорию, где находится блокнот
+current_dir = os.path.dirname(os.path.abspath('__file__'))
 
-    for i, sentence_tokens in enumerate(result):  # Здесь sentence_tokens — это уже список слов
-        if len(lemmatized_find) == 1:  # Если в find только одно слово
-            # Проверяем наличие этого слова в предложении
-            if lemmatized_find[0] in sentence_tokens:
-                found_indices.append(i)  # Если найдено, добавляем индекс предложения
-        else:
-            # Ищем, находятся ли леммы из find на расстоянии не более двух слов друг от друга
-            positions = []
-            for lemma in lemmatized_find:
-                if lemma in sentence_tokens:
-                    positions.append(sentence_tokens.index(lemma))
-
-            # Если леммы найдены и их позиции расположены в пределах двух слов друг от друга
-            if len(positions) == len(lemmatized_find):  # Все леммы найдены
-                positions.sort()  # Сортируем позиции
-                if all(abs(positions[i] - positions[i+1]) <= 2 for i in range(len(positions) - 1)):
-                    found_indices.append(i)  # Добавляем индекс предложения
-
-    # Выводим предложения из processed_list с найденными индексами
-    for index in found_indices:
-        print(f"Matching sentence in processed_list: {processed_list[index]}")
+# Укажем путь к папке poppler/bin относительно текущей директории
+poppler_path = os.path.join(current_dir, 'poppler', 'bin')
