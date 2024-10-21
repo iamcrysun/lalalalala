@@ -1,11 +1,6 @@
-import os
-from pathlib import Path
-import ipywidgets as widgets
-from IPython.display import display
-
 # Создаем виджеты для ввода данных
 directory_input = widgets.Text(
-    value='Файлы',
+    value='Файлы',  # Убедитесь, что директория существует
     description='Директория:',
     disabled=False
 )
@@ -20,7 +15,7 @@ keyword_input = widgets.Text(
 run_button = widgets.Button(
     description='Найти',
     disabled=False,
-    button_style='success'  # 'success', 'info', 'warning', 'danger' или ''
+    button_style='success'  # 'success', 'info', 'warning', 'danger'
 )
 
 # Функция, которая будет вызываться при нажатии на кнопку
