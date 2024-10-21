@@ -1,8 +1,62 @@
-import os
-from pdf2image import convert_from_path
+---------------------------------------------------------------------------
+FileNotFoundError                         Traceback (most recent call last)
+File /opt/conda/lib/python3.11/site-packages/pdf2image/pdf2image.py:581, in pdfinfo_from_path(pdf_path, userpw, ownerpw, poppler_path, rawdates, timeout, first_page, last_page)
+    580     env["LD_LIBRARY_PATH"] = poppler_path + ":" + env.get("LD_LIBRARY_PATH", "")
+--> 581 proc = Popen(command, env=env, stdout=PIPE, stderr=PIPE)
+    583 try:
 
-# Получаем текущую директорию, где находится блокнот
-current_dir = os.path.dirname(os.path.abspath('__file__'))
+File /opt/conda/lib/python3.11/subprocess.py:1026, in Popen.__init__(self, args, bufsize, executable, stdin, stdout, stderr, preexec_fn, close_fds, shell, cwd, env, universal_newlines, startupinfo, creationflags, restore_signals, start_new_session, pass_fds, user, group, extra_groups, encoding, errors, text, umask, pipesize, process_group)
+   1023             self.stderr = io.TextIOWrapper(self.stderr,
+   1024                     encoding=encoding, errors=errors)
+-> 1026     self._execute_child(args, executable, preexec_fn, close_fds,
+   1027                         pass_fds, cwd, env,
+   1028                         startupinfo, creationflags, shell,
+   1029                         p2cread, p2cwrite,
+   1030                         c2pread, c2pwrite,
+   1031                         errread, errwrite,
+   1032                         restore_signals,
+   1033                         gid, gids, uid, umask,
+   1034                         start_new_session, process_group)
+   1035 except:
+   1036     # Cleanup if the child failed starting.
 
-# Укажем путь к папке poppler/bin относительно текущей директории
-poppler_path = os.path.join(current_dir, 'poppler', 'bin')
+File /opt/conda/lib/python3.11/subprocess.py:1955, in Popen._execute_child(self, args, executable, preexec_fn, close_fds, pass_fds, cwd, env, startupinfo, creationflags, shell, p2cread, p2cwrite, c2pread, c2pwrite, errread, errwrite, restore_signals, gid, gids, uid, umask, start_new_session, process_group)
+   1954 if err_filename is not None:
+-> 1955     raise child_exception_type(errno_num, err_msg, err_filename)
+   1956 else:
+
+FileNotFoundError: [Errno 2] No such file or directory: '/home/jovyan/77-customer-index/customer-index/LEMUR_P/poppler/bin/pdfinfo'
+
+During handling of the above exception, another exception occurred:
+
+PDFInfoNotInstalledError                  Traceback (most recent call last)
+Cell In[4], line 7
+      3 from pdf2image import convert_from_path
+      5 # Шаг 1: Преобразование страницы PDF в изображение
+----> 7 images = convert_from_path(file, dpi=300, poppler_path=poppler_path)  # Конвертация страницы в изображение
+      9 # Сохраняем изображение для дальнейшего анализа
+     10 images[1].save("page_image.png", "PNG")
+
+File /opt/conda/lib/python3.11/site-packages/pdf2image/pdf2image.py:127, in convert_from_path(pdf_path, dpi, output_folder, first_page, last_page, fmt, jpegopt, thread_count, userpw, ownerpw, use_cropbox, strict, transparent, single_file, output_file, poppler_path, grayscale, size, paths_only, use_pdftocairo, timeout, hide_annotations)
+    124 if isinstance(poppler_path, PurePath):
+    125     poppler_path = poppler_path.as_posix()
+--> 127 page_count = pdfinfo_from_path(
+    128     pdf_path, userpw, ownerpw, poppler_path=poppler_path
+    129 )["Pages"]
+    131 # We start by getting the output format, the buffer processing function and if we need pdftocairo
+    132 parsed_fmt, final_extension, parse_buffer_func, use_pdfcairo_format = _parse_format(
+    133     fmt, grayscale
+    134 )
+
+File /opt/conda/lib/python3.11/site-packages/pdf2image/pdf2image.py:607, in pdfinfo_from_path(pdf_path, userpw, ownerpw, poppler_path, rawdates, timeout, first_page, last_page)
+    604     return d
+    606 except OSError:
+--> 607     raise PDFInfoNotInstalledError(
+    608         "Unable to get page count. Is poppler installed and in PATH?"
+    609     )
+    610 except ValueError:
+    611     raise PDFPageCountError(
+    612         f"Unable to get page count.\n{err.decode('utf8', 'ignore')}"
+    613     )
+
+PDFInfoNotInstalledError: Unable to get page count. Is poppler installed and in PATH?
