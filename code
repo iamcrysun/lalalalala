@@ -1,2 +1,15 @@
-ERROR: Could not install packages due to an OSError: [Errno 13] Permission denied: 'INSTALLER'
-Consider using the `--user` option or check the permissions.
+  WARNING: The scripts f2py and numpy-config are installed in '/home/jovyan/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script markdown-it is installed in '/home/jovyan/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script typer is installed in '/home/jovyan/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script weasel is installed in '/home/jovyan/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script spacy is installed in '/home/jovyan/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+catboost 1.2.7 requires numpy<2.0,>=1.16.0, but you have numpy 2.0.2 which is incompatible.
+mlflow 2.15.1 requires numpy<2, but you have numpy 2.0.2 which is incompatible.
+pyarrow 15.0.2 requires numpy<2,>=1.16.6, but you have numpy 2.0.2 which is incompatible.
+Successfully installed blis-1.0.1 catalogue-2.0.10 cloudpathlib-0.20.0 confection-0.1.5 langcodes-3.4.1 language-data-1.2.0 marisa-trie-1.2.1 markdown-it-py-3.0.0 mdurl-0.1.2 murmurhash-1.0.10 numpy-2.0.2 preshed-3.0.9 rich-13.9.2 spacy-3.8.2 srsly-2.4.8 thinc-8.3.2 typer-0.12.5 weasel-0.4.1
