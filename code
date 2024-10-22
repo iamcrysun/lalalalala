@@ -1,42 +1,23 @@
-# Создаем виджет для вывода
-out = widgets.Output()
+import spacy
+import os
 
-# Создаем виджеты для ввода данных
-directory_input = widgets.Text(
-    value='Файлы',  # Убедитесь, что директория существует
-    description='Директория:',
-    disabled=False
-)
+# Получаем путь к директории, где расположен скрипт
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
-keyword_input = widgets.Text(
-    value='global energy',
-    description='Ключевое слово:',
-    disabled=False
-)
+# Указываем путь к модели (предположим, что модель лежит в папке 'en_core_web_sm' рядом со скриптом)
+model_path = os.path.join(current_dir, 'en_core_web_sm')
 
-# Кнопка для запуска процесса
-run_button = widgets.Button(
-    description='Найти',
-    disabled=False,
-    button_style='success'  # 'success', 'info', 'warning', 'danger'
-)
+# Загружаем модель из указанной директории
+nlp = spacy.load(model_path)
 
-# Функция, которая будет вызываться при нажатии на кнопку
-def on_button_click(b):
-    directory = directory_input.value
-    keyword = keyword_input.value
+# Пример текста для лемматизации
+text = "The children are playing with their toys and running around."
 
-    # Очищаем предыдущий вывод перед новым запуском
-    with out:
-        out.clear_output()
-        print(f"\nПоиск в директории: {directory}")
-        print(f"Искомое слово: {keyword}")
-        
-        # Запуск процесса обработки PDF
-        process_pdf_directory(directory, keyword)
+# Пропускаем текст через модель
+doc = nlp(text)
 
-# Привязываем функцию к кнопке
-run_button.on_click(on_button_click)
+# Лемматизация слов (без стоп-слов)
+lemmatized_list = [token.lemma_ for token in doc if not token.is_stop]
 
-# Отображаем элементы управления и место для вывода
-display(directory_input, keyword_input, run_button, out)
+# Результат
+print(lemmatized_list)
