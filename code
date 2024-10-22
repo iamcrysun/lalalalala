@@ -1,23 +1,2 @@
-import spacy
-import os
-
-# Получаем путь к директории, где расположен скрипт
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Указываем путь к модели (предположим, что модель лежит в папке 'en_core_web_sm' рядом со скриптом)
-model_path = os.path.join(current_dir, 'en_core_web_sm')
-
-# Загружаем модель из указанной директории
-nlp = spacy.load(model_path)
-
-# Пример текста для лемматизации
-text = "The children are playing with their toys and running around."
-
-# Пропускаем текст через модель
-doc = nlp(text)
-
-# Лемматизация слов (без стоп-слов)
-lemmatized_list = [token.lemma_ for token in doc if not token.is_stop]
-
-# Результат
-print(lemmatized_list)
+ERROR: Could not install packages due to an OSError: [Errno 13] Permission denied: 'INSTALLER'
+Consider using the `--user` option or check the permissions.
