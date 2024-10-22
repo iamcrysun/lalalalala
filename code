@@ -1,3 +1,6 @@
+# Создаем виджет для вывода
+out = widgets.Output()
+
 # Создаем виджеты для ввода данных
 directory_input = widgets.Text(
     value='Файлы',  # Убедитесь, что директория существует
@@ -22,14 +25,18 @@ run_button = widgets.Button(
 def on_button_click(b):
     directory = directory_input.value
     keyword = keyword_input.value
-    print(f"\nПоиск в директории: {directory}")
-    print(f"Искомое слово: {keyword}")
-    
-    # Запуск процесса обработки PDF
-    process_pdf_directory(directory, keyword)
+
+    # Очищаем предыдущий вывод перед новым запуском
+    with out:
+        out.clear_output()
+        print(f"\nПоиск в директории: {directory}")
+        print(f"Искомое слово: {keyword}")
+        
+        # Запуск процесса обработки PDF
+        process_pdf_directory(directory, keyword)
 
 # Привязываем функцию к кнопке
 run_button.on_click(on_button_click)
 
-# Отображаем элементы управления
-display(directory_input, keyword_input, run_button)
+# Отображаем элементы управления и место для вывода
+display(directory_input, keyword_input, run_button, out)
