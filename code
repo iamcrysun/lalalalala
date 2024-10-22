@@ -1,35 +1,17 @@
-# Создаем виджеты для ввода данных
-directory_input = widgets.Text(
-    value='Файлы',  # Убедитесь, что директория существует
-    description='Директория:',
-    disabled=False
-)
-
-keyword_input = widgets.Text(
-    value='global energy',
-    description='Ключевое слово:',
-    disabled=False
-)
-
-# Кнопка для запуска процесса
-run_button = widgets.Button(
-    description='Найти',
-    disabled=False,
-    button_style='success'  # 'success', 'info', 'warning', 'danger'
-)
-
-# Функция, которая будет вызываться при нажатии на кнопку
-def on_button_click(b):
-    directory = directory_input.value
-    keyword = keyword_input.value
-    print(f"\nПоиск в директории: {directory}")
-    print(f"Искомое слово: {keyword}")
-    
-    # Запуск процесса обработки PDF
-    process_pdf_directory(directory, keyword)
-
-# Привязываем функцию к кнопке
-run_button.on_click(on_button_click)
-
-# Отображаем элементы управления
-display(directory_input, keyword_input, run_button)
+def process_pdf_directory(directory_path, find_word):
+    # Проходим по всем PDF-файлам в директории
+    for file_path in Path(directory_path).glob('*.pdf'):
+        print(f"\n=== Работаю с файлом {file_path.name} ===")
+        paragraphs = extract_paragraphs_from_pdf(file_path)
+        processed_text = process_paragraphs(paragraphs)
+        lines_list = process_and_merge_tabbed_lines(processed_text)
+        processed_list = process_list_elements(lines_list)
+        result = [process_text(text) for text in processed_list]
+        
+        # Ищем фрагменты
+        fragments = find_near_words(result, processed_list, find_word)
+        
+        # Если есть фрагменты, выводим имя файла и фрагменты
+        if fragments:
+            print(f"\n=== В файле: {file_path.name} найдено {len(fragments)} совпадений ===")
+        print("_______________________________________________________________________")      
