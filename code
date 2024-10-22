@@ -1,15 +1,30 @@
-  WARNING: The scripts f2py and numpy-config are installed in '/home/jovyan/.local/bin' which is not on PATH.
-  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
-  WARNING: The script markdown-it is installed in '/home/jovyan/.local/bin' which is not on PATH.
-  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
-  WARNING: The script typer is installed in '/home/jovyan/.local/bin' which is not on PATH.
-  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
-  WARNING: The script weasel is installed in '/home/jovyan/.local/bin' which is not on PATH.
-  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
-  WARNING: The script spacy is installed in '/home/jovyan/.local/bin' which is not on PATH.
-  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
-ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
-catboost 1.2.7 requires numpy<2.0,>=1.16.0, but you have numpy 2.0.2 which is incompatible.
-mlflow 2.15.1 requires numpy<2, but you have numpy 2.0.2 which is incompatible.
-pyarrow 15.0.2 requires numpy<2,>=1.16.6, but you have numpy 2.0.2 which is incompatible.
-Successfully installed blis-1.0.1 catalogue-2.0.10 cloudpathlib-0.20.0 confection-0.1.5 langcodes-3.4.1 language-data-1.2.0 marisa-trie-1.2.1 markdown-it-py-3.0.0 mdurl-0.1.2 murmurhash-1.0.10 numpy-2.0.2 preshed-3.0.9 rich-13.9.2 spacy-3.8.2 srsly-2.4.8 thinc-8.3.2 typer-0.12.5 weasel-0.4.1
+# Основная функция поиска
+def find_near_words(result, processed_list, find):
+    lemmatized_find = process_text(find)  # Лемматизируем и очищаем find через process_text
+
+    found_indices = []  # Список для хранения индексов найденных предложений
+
+    for i, sentence_tokens in enumerate(result):  # Здесь sentence_tokens — это уже список слов
+        if len(lemmatized_find) == 1:  # Если в find только одно слово
+            # Проверяем наличие этого слова в предложении
+            if lemmatized_find[0] in sentence_tokens:
+                found_indices.append(i)  # Если найдено, добавляем индекс предложения
+        else:
+            # Ищем, находятся ли леммы из find на расстоянии не более двух слов друг от друга
+            positions = []
+            for lemma in lemmatized_find:
+                if lemma in sentence_tokens:
+                    positions.append(sentence_tokens.index(lemma))
+
+            # Если леммы найдены и их позиции расположены в пределах двух слов друг от друга
+            if len(positions) == len(lemmatized_find):  # Все леммы найдены
+                positions.sort()  # Сортируем позиции
+                if all(abs(positions[i] - positions[i+1]) <= 2 for i in range(len(positions) - 1)):
+                    found_indices.append(i)  # Добавляем индекс предложения
+
+    # Выводим предложения из processed_list с найденными индексами
+    count=1
+    for index in found_indices:
+        print(f"Совпадение №{count}: {processed_list[index]}")
+        count = count+1 
+    return found_indices
