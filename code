@@ -16,17 +16,19 @@ def process_pdf_directory(directory_path, find_word):
             print(f"\n=== В файле: {file_path.name} найдено {len(fragments)} совпадений ===")
         print("_______________________________________________________________________")      
 
-
-___________________________________________________________________________________________
-Stock
-Bullish
-bearish
-coal deficit
-coal proficit
-thermal coal supply
-
-________________________________________________________________________________________
-# Пример вызова функции для обработки директории
+# Директория с PDF-файлами
 directory = "Файлы"
-find = "global energy"
-process_pdf_directory(directory, find)
+
+# Список поисковых запросов
+search_queries = [
+    "Stock",
+    "Bullish",
+    "bearish",
+    "coal deficit",
+    "coal proficit",
+    "thermal coal supply"
+]
+
+# Цикл по всем запросам
+for query in search_queries:
+    process_pdf_directory(directory, query)
