@@ -1,12 +1,30 @@
-# Функция для очистки текста: удаление стоп-слов и лемматизация
-def process_text(text):
-    # Токенизация
-    tokens = word_tokenize(text)
+# Основная функция поиска
+def find_near_words(result, processed_list, find):
+    lemmatized_find = process_text(find)  # Лемматизируем и очищаем find через process_text
 
-    # Удаление стоп-слов и лемматизация
-    cleaned_tokens = [
-        lemmatizer.lemmatize(word.lower()) for word in tokens
-        if word.isalnum() and word.lower() not in stop_words  # Убираем стоп-слова и небуквенные токены
-    ]
+    found_indices = []  # Список для хранения индексов найденных предложений
 
-    return cleaned_tokens
+    for i, sentence_tokens in enumerate(result):  # Здесь sentence_tokens — это уже список слов
+        if len(lemmatized_find) == 1:  # Если в find только одно слово
+            # Проверяем наличие этого слова в предложении
+            if lemmatized_find[0] in sentence_tokens:
+                found_indices.append(i)  # Если найдено, добавляем индекс предложения
+        else:
+            # Ищем, находятся ли леммы из find на расстоянии не более двух слов друг от друга
+            positions = []
+            for lemma in lemmatized_find:
+                if lemma in sentence_tokens:
+                    positions.append(sentence_tokens.index(lemma))
+
+            # Если леммы найдены и их позиции расположены в пределах двух слов друг от друга
+            if len(positions) == len(lemmatized_find):  # Все леммы найдены
+                positions.sort()  # Сортируем позиции
+                if all(abs(positions[i] - positions[i+1]) <= 2 for i in range(len(positions) - 1)):
+                    found_indices.append(i)  # Добавляем индекс предложения
+
+    # Выводим предложения из processed_list с найденными индексами
+    count=1
+    for index in found_indices:
+        print(f"Совпадение №{count}: {processed_list[index]}")
+        count = count+1 
+    return found_indices
