@@ -1,14 +1,12 @@
-import stanza
+# Функция для очистки текста: удаление стоп-слов и лемматизация
+def process_text(text):
+    # Токенизация
+    tokens = word_tokenize(text)
 
-# Загрузка модели для английского языка
-nlp = stanza.Pipeline('en')
+    # Удаление стоп-слов и лемматизация
+    cleaned_tokens = [
+        lemmatizer.lemmatize(word.lower()) for word in tokens
+        if word.isalnum() and word.lower() not in stop_words  # Убираем стоп-слова и небуквенные токены
+    ]
 
-def stanza_lemmatize(text):
-    doc = nlp(text)
-    lemmatized_tokens = [word.lemma for sent in doc.sentences for word in sent.words]
-    return lemmatized_tokens
-
-# Пример использования
-text = "The children are playing with their toys and running around."
-lemmatized_tokens = stanza_lemmatize(text)
-print(lemmatized_tokens)
+    return cleaned_tokens
