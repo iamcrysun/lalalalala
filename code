@@ -1,8 +1,14 @@
-import fitz  # это pymupdf
-import re
-import os
-import sys
-import nltk
-from pathlib import Path
-import ipywidgets as widgets
-from IPython.display import display
+import spacy
+nlp = spacy.load("en_core_web_sm")
+
+def process_text(text):
+    # Применяем spaCy для токенизации и лемматизации
+    doc = nlp(text)
+
+    # Удаление стоп-слов и лемматизация
+    cleaned_tokens = [
+        token.lemma_.lower() for token in doc
+        if token.is_alpha and not token.is_stop  # Убираем стоп-слова и небуквенные токены
+    ]
+
+    return cleaned_tokens
